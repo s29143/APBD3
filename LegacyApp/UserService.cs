@@ -4,7 +4,7 @@ namespace LegacyApp
 {
     public class UserService
     {
-        public ClientRepository ClientRepository { get; set; } = new ClientRepository();
+        public ClientRepository ClientRepository { get; } = new ClientRepository();
         public const int MinAge = 21;
         public bool AddUser(string firstName, string lastName, string email, DateTime dateOfBirth, int clientId)
         {
