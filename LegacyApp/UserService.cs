@@ -4,8 +4,15 @@ namespace LegacyApp
 {
     public class UserService
     {
-        public ClientRepository ClientRepository { get; } = new ClientRepository();
-        public const int MinAge = 21;
+        private IClientRepo _clientRepo { get; }
+        private const int MinAge = 21;
+        private const int CreditLimit = 500;
+
+        public UserService()
+        {
+            _clientRepo = new ClientRepository();
+        }
+        
         public bool AddUser(string firstName, string lastName, string email, DateTime dateOfBirth, int clientId)
         {
             var user = new User
@@ -15,7 +22,7 @@ namespace LegacyApp
                 FirstName = firstName,
                 LastName = lastName
             };
-            user.Client = ClientRepository.GetById(clientId);
+            user.Client = _clientRepo.GetById(clientId);
             if(!ValidateUser(user) || !CheckCreditLimit(user))
             {
                 return false;
@@ -65,7 +72,7 @@ namespace LegacyApp
                     user.HasCreditLimit = true;
                 }
                 user.CreditLimit = creditLimit;
-                if (user.HasCreditLimit && user.CreditLimit < 500)
+                if (user.HasCreditLimit && user.CreditLimit < CreditLimit)
                 {
                     return false;
                 }
